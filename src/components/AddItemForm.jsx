@@ -3,6 +3,7 @@ import { useState } from "react";
 const AddItemForm = ({ onAddItem }) => {
     const [itemName, setItemName] = useState("");
     const [category, setCategory] = useState("");
+    const [quantity, setQuantity] = useState(1);
     
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -10,11 +11,13 @@ const AddItemForm = ({ onAddItem }) => {
             const newItem = {
                 name: itemName.trim(),
                 category: category.trim() || "Uncategorized",
+                quantity: parseInt(quantity) || 1,
                 isBought: false,
             };
             onAddItem(newItem);
             setItemName("");
             setCategory("");
+            setQuantity(1);
         }
     }
     
@@ -28,6 +31,16 @@ const AddItemForm = ({ onAddItem }) => {
                     placeholder="e.g. Eggs"
                     value={itemName}
                     onChange={(e) => setItemName(e.target.value)}
+                />
+            </div>
+            <div className="mb-2">
+                <label className="text-sm">Quantity</label>
+                <input
+                    type="number"
+                    className="w-full rounded-lg border-2 border-gray-300 px-3 py-2 mt-1"
+                    placeholder="e.g. 12"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
                 />
             </div>
             <div className="mb-0.5">
