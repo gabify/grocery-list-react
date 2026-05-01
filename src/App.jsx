@@ -3,36 +3,36 @@ import { useState, useEffect } from "react";
 import AddItemForm from "./components/AddItemForm";
 import GroceryList from "./components/GroceryList";
 import Header from "./components/Header";
+import ListFilter from "./components/ListFilter";
 
 function App() {
   const [items, setItems] = useState([]);
+  const [filter, setFilter] = useState("all");
 
-  const addItem = (item) => {
-    setItems([...items, item])
-    localStorage.setItem("groceryList", JSON.stringify([...items, item]));
-  };
+  const addItem = (item) => setItems([...items, item]);
 
-  const deleteItem = (index) => {
-    const newItems = [...items];
-    newItems.splice(index, 1);
+  const deleteItem = (id) => setItems(items.filter(item => item.id !== id));
+
+  const toggleBought = (id) =>{
+    const newItems = items.map(item => 
+      item.id === id ? {...item, isBought: !item.isBought} : item
+    );
     setItems(newItems);
-    localStorage.setItem("groceryList", JSON.stringify(newItems));
   }
 
-  const toggleBought = (index) =>{
-    const newItems = [...items];
-    newItems[index].isBought = !newItems[index].isBought;
-    setItems(newItems);
-    localStorage.setItem("groceryList", JSON.stringify(newItems));
-  }
+  const changeFilter = (newFilter) => setFilter(newFilter);
 
   useEffect(() => {
     const groceryList = localStorage.getItem("groceryList");
     if (groceryList) {
       setItems(JSON.parse(groceryList));
     }
-  }, [])
+  }, []);
 
+  useEffect(() =>{
+    const updateGroceryList = () => localStorage.setItem("groceryList", JSON.stringify(items));
+    updateGroceryList();
+  }, [items]);
 
   return (
     <>
@@ -41,7 +41,8 @@ function App() {
 
         <AddItemForm onAddItem={addItem} />
 
-        <GroceryList items={items} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
+        <ListFilter onSelect={changeFilter}/>
+        <GroceryList items={items} filter={filter} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
       </main>
     </>
   )

@@ -1,11 +1,16 @@
 import GroceryItem from "./GroceryItem";
 
-const GroceryList = ({ items, onDeleteItem, onToggleBought}) => {
+const GroceryList = ({ items, filter, onDeleteItem, onToggleBought}) => {
+    const filteredItems = 
+        filter === "all"
+            ? items
+            : items.filter(item => item.category.toLowerCase() === filter.toLowerCase());
+
     return (
-        items.length > 0 ? (
+        filteredItems.length > 0 ? (
             <ul className="mt-4 space-y-2">
-                {items.map((item, index) => (
-                    <GroceryItem key={index} item={item} onDelete={() => onDeleteItem(index)} onToggle={() => onToggleBought(index)} />
+                {filteredItems.map((item) => (
+                    <GroceryItem key={item.id} item={item} onDelete={() => onDeleteItem(item.id)} onToggle={() => onToggleBought(item.id)} />
                 ))}
             </ul>
         ) : (
