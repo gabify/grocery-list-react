@@ -1,6 +1,6 @@
-const ListSorter = ({ sortBy, onSelect }) => {
+const ListSorter = ({onSelect }) => {
     return (
-        <select className="w-full rounded-lg border-2 border-gray-300 px-2 py-1" value={sortBy} onChange={(e) => onSelect(e.target.value)}>
+        <select className="w-full rounded-lg border-2 border-gray-300 px-2 py-1" onChange={(e) => onSelect(e.target.value)}>
             <option>Sort By</option>
             <option value="default">Default</option>
             <option value="alphabetical">A-Z</option>
