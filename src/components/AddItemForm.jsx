@@ -41,13 +41,18 @@ const AddItemForm = ({ onAddItem }) => {
                     className="w-full rounded-lg border-2 border-gray-300 px-3 py-2 mt-1"
                     placeholder="e.g. 12"
                     value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
+                    onChange={(e) => {
+                        if(e.target.value < 1){
+                            setQuantity(1);
+                        }else{
+                            setQuantity(e.target.value)
+                        }
+                    }}
                 />
             </div>
             <div className="mb-0.5">
                 <label className="text-sm">Category</label>
                 <select className="w-full rounded-lg border-2 border-gray-300 px-2 py-1" value={category} onChange={(e) => setCategory(e.target.value)}>
-                    <option value="all">All</option>
                     <option value="produce">Produce</option>
                     <option value="dairy">Dairy</option>
                     <option value="meat">Meat</option>

@@ -4,20 +4,29 @@ import AddItemForm from "./components/AddItemForm";
 import GroceryList from "./components/GroceryList";
 import Header from "./components/Header";
 import ListFilter from "./components/ListFilter";
+import ListSorter from "./components/ListSorter";
 
 function App() {
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("default");
 
-  const addItem = (item) => setItems([...items, item]);
+  const addItem = (item) => {
+    setItems([...items, item]);
+    localStorage.setItem("groceryList", JSON.stringify([...items, item]));
+  };
 
-  const deleteItem = (id) => setItems(items.filter(item => item.id !== id));
+  const deleteItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
+    localStorage.setItem("groceryList", JSON.stringify(items.filter(item => item.id !== id)));
+  }
 
   const toggleBought = (id) =>{
     const newItems = items.map(item => 
       item.id === id ? {...item, isBought: !item.isBought} : item
     );
     setItems(newItems);
+    localStorage.setItem("groceryList", JSON.stringify(newItems));
   }
 
   const changeFilter = (newFilter) => setFilter(newFilter);
@@ -29,10 +38,12 @@ function App() {
     }
   }, []);
 
-  useEffect(() =>{
+  // This should automatically update localStorage whenever items change.
+  // However, when the app loads, it accidentally stores the inital empty list to localStorage, which overwrites any existing data.
+  /* useEffect(() =>{
     const updateGroceryList = () => localStorage.setItem("groceryList", JSON.stringify(items));
     updateGroceryList();
-  }, [items]);
+  }, [items]); */
 
   return (
     <>
@@ -42,7 +53,8 @@ function App() {
         <AddItemForm onAddItem={addItem} />
 
         <ListFilter onSelect={changeFilter}/>
-        <GroceryList items={items} filter={filter} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
+        <ListSorter sortBy={sortBy} onSelect={setSortBy} />
+        <GroceryList items={items} sortBy={sortBy} filter={filter} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
       </main>
     </>
   )

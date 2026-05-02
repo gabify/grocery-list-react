@@ -1,15 +1,34 @@
 import GroceryItem from "./GroceryItem";
 
-const GroceryList = ({ items, filter, onDeleteItem, onToggleBought}) => {
+const GroceryList = ({ items, sortBy, filter, onDeleteItem, onToggleBought}) => {
     const filteredItems = 
         filter === "all"
             ? items
             : items.filter(item => item.category.toLowerCase() === filter.toLowerCase());
+        
+    const sortedItems = [...filteredItems].sort((a, b) =>{
+        switch(sortBy){
+            case "alphabetical":
+                return a.name.localeCompare(b.name);
+            case "reverse-alphabetical":
+                return b.name.localeCompare(a.name);
+            case "reverse-alphabetical":
+                return a.quantity - b.quantity;
+            case "category":
+                return a.category.localeCompare(b.category);
+            case "unbought-first":
+                return a.isBought - b.isBought;
+            case "bought-first":
+                return b.isBought - a.isBought;
+            default:
+                return 0;
+        }
+    })
 
     return (
-        filteredItems.length > 0 ? (
+        sortedItems.length > 0 ? (
             <ul className="mt-4 space-y-2">
-                {filteredItems.map((item) => (
+                {sortedItems.map((item) => (
                     <GroceryItem key={item.id} item={item} onDelete={() => onDeleteItem(item.id)} onToggle={() => onToggleBought(item.id)} />
                 ))}
             </ul>
