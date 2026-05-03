@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "./Header";
 
-const AddItemDialog = ({ dialogRef, onClose, onAddItem }) => {
+const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
     const [itemName, setItemName] = useState("");
     const [category, setCategory] = useState("");
     const [quantity, setQuantity] = useState(1);
@@ -17,6 +17,7 @@ const AddItemDialog = ({ dialogRef, onClose, onAddItem }) => {
                 isBought: false,
             };
             onAddItem(newItem);
+            onNotify(`${itemName} added!`, "success");
             setItemName("");
             setCategory("");
             setQuantity(1);
@@ -25,7 +26,12 @@ const AddItemDialog = ({ dialogRef, onClose, onAddItem }) => {
     }
     
     return (
-        <dialog className="rounded-lg m-4 px-4 py-5 w-full relative" ref={dialogRef}>
+        <dialog className={
+            `rounded-lg m-4 px-4 py-5 w-full relative transition-all duration-150 ease-out transform
+            ${isOpen ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-2 pointer-events-none"}
+            `} 
+            ref={dialogRef}
+        >
             <button className="absolute top-2 right-2 text-lg text-red-500 hover:text-gray-700" onClick={onClose}>
                 &times;
             </button>

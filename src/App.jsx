@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-
+import toast, { Toaster } from "react-hot-toast";
 import AddItemDialog from "./components/AddItemDialog";
 import GroceryList from "./components/GroceryList";
 import Header from "./components/Header";
@@ -8,29 +8,41 @@ import ListSorter from "./components/ListSorter";
 
 function App() {
   const [items, setItems] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false); //Checks if data is loaded from localStoage
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
+  const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false);
+
+  const showToast = (message, status) => {
+    if(status === "success"){
+      toast.success(message);
+    }else{
+      toast.error(message);
+    }
+  } 
 
   const dialogRef = useRef(null);
-  const openDialog = () => dialogRef.current.showModal();
-  const closeDialog = () => dialogRef.current.close();
+  const openDialog = () => {
+    dialogRef.current.showModal();
+    setIsAddItemDialogOpen(true);
+  }
 
-  const addItem = (item) => {
-    setItems([...items, item]);
-    localStorage.setItem("groceryList", JSON.stringify([...items, item]));
-  };
+  const closeDialog = () => {
+    dialogRef.current.close();
+    setIsAddItemDialogOpen(false);
+  }
+
+  const addItem = (item) => setItems([...items, item]);
 
   const deleteItem = (id) => {
     setItems(items.filter(item => item.id !== id));
-    localStorage.setItem("groceryList", JSON.stringify(items.filter(item => item.id !== id)));
-  }
+    showToast("Item removed!", "success");
+  };
 
   const toggleBought = (id) =>{
-    const newItems = items.map(item => 
+    setItems(items.map(item => 
       item.id === id ? {...item, isBought: !item.isBought} : item
-    );
-    setItems(newItems);
-    localStorage.setItem("groceryList", JSON.stringify(newItems));
+    ));
   }
 
   const changeFilter = (newFilter) => setFilter(newFilter);
@@ -41,21 +53,31 @@ function App() {
     if (groceryList) {
       setItems(JSON.parse(groceryList));
     }
+    setIsDataLoaded(true);
   }, []);
 
-  // This should automatically update localStorage whenever items change.
-  // However, when the app loads, it accidentally stores the inital empty list to localStorage, which overwrites any existing data.
-  /* useEffect(() =>{
-    const updateGroceryList = () => localStorage.setItem("groceryList", JSON.stringify(items));
+
+  useEffect(() =>{
+    const updateGroceryList = () => {
+      if(!isDataLoaded) return;
+      localStorage.setItem("groceryList", JSON.stringify(items));
+    };
+
     updateGroceryList();
-  }, [items]); */
+  }, [items, isDataLoaded]);
 
   return (
     <>
       <main className="px-4 py-8">
         <Header title="Listahan" subtitle="A simple grocery list app"/>
 
-        <AddItemDialog dialogRef={dialogRef} onClose={closeDialog} onAddItem={addItem} />
+        <AddItemDialog 
+          isOpen={isAddItemDialogOpen} 
+          dialogRef={dialogRef} 
+          onClose={closeDialog} 
+          onAddItem={addItem} 
+          onNotify={showToast}
+        />
 
         <section className="flex flex-row gap-2 my-5 ">
           <ListFilter onSelect={changeFilter}/>
@@ -65,6 +87,14 @@ function App() {
           </button>
         </section>
         <GroceryList items={items} sortBy={sortBy} filter={filter} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
+
+        <Toaster 
+          position="bottom-center"
+          toastOptions={{
+            duration: 2000,
+            removeDelay: 1000,
+          }}
+        />
       </main>
     </>
   )
