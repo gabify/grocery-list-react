@@ -57,7 +57,7 @@ function App() {
 
         <AddItemDialog dialogRef={dialogRef} onClose={closeDialog} onAddItem={addItem} />
 
-        <section className="flex flex-row gap-2 mt-5">
+        <section className="flex flex-row gap-2 my-5 ">
           <ListFilter onSelect={changeFilter}/>
           <ListSorter onSelect={changeSortBy} />
           <button className="w-full rounded-lg bg-green-500 text-white text-center px-2 py-1" onClick={openDialog}>
