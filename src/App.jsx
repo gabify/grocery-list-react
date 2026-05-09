@@ -8,7 +8,7 @@ import ListSorter from "./components/ListSorter";
 import { useItemContext } from "./hooks/useItemContext";
 
 function App() {
-  const {items, dispatch} = useItemContext();
+  const {items} = useItemContext();
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
   const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false);
@@ -31,17 +31,6 @@ function App() {
     dialogRef.current.close();
     setIsAddItemDialogOpen(false);
   }
-
-/*   const deleteItem = (id) => {
-    setItems(items.filter(item => item.id !== id));
-    showToast("Item removed!", "success");
-  }; */
-
-/*   const toggleBought = (id) =>{
-    setItems(items.map(item => 
-      item.id === id ? {...item, isBought: !item.isBought} : item
-    ));
-  } */
 
   const changeFilter = (newFilter) => setFilter(newFilter);
   const changeSortBy = (newSortBy) => setSortBy(newSortBy);

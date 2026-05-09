@@ -16,6 +16,12 @@ const itemReducer = (state, action) =>{
             return {
                 items: state.items.filter(item => item.id !== action.payload)
             }
+        case "EDIT_ITEM":
+            return {
+                items: state.items.map(
+                    item => item.id === action.payload.id ? action.payload : item
+                )
+            }
         case "TOGGLE_ITEM":
             return {
                 items: state.items.map(

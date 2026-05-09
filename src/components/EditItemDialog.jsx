@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Header from "./Header";
+import { useItemContext } from "../hooks/useItemContext";
 
 const EditItemDialog = ({ item, isOpen, dialogRef, onClose }) => {
+    const {dispatch} = useItemContext();
     const [itemName, setItemName] = useState(item.name);
     const [category, setCategory] = useState(item.category);
     const [quantity, setQuantity] = useState(item.quantity);
@@ -10,17 +12,13 @@ const EditItemDialog = ({ item, isOpen, dialogRef, onClose }) => {
         e.preventDefault();
         if (itemName.trim()) {
             const newItem = {
-                id: Date.now(),
+                id: item.id,
                 name: itemName.trim(),
                 category: category.trim() || "Uncategorized",
                 quantity: parseInt(quantity) || 1,
-                isBought: false,
+                isBought: item.isBought,
             };
-            //onAddItem(newItem);
-            onNotify(`${itemName} added!`, "success");
-            setItemName("");
-            setCategory("");
-            setQuantity(1);
+            dispatch({type: "EDIT_ITEM", payload: newItem});
             onClose();
         }
     }

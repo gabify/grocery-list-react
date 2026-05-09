@@ -16,8 +16,6 @@ const GroceryItem = ({ item }) => {
         setIsEditItemDialogOpen(false);
     }
 
-
-
     return (
         <li className={`
             flex items-center justify-between bg-gray-50 shadow-xs px-3 py-3 rounded-lg
