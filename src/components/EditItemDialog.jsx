@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Header from "./Header";
 
-const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
-    const [itemName, setItemName] = useState("");
-    const [category, setCategory] = useState("");
-    const [quantity, setQuantity] = useState(1);
+const EditItemDialog = ({ item, isOpen, dialogRef, onClose }) => {
+    const [itemName, setItemName] = useState(item.name);
+    const [category, setCategory] = useState(item.category);
+    const [quantity, setQuantity] = useState(item.quantity);
     
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -16,7 +16,7 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
                 quantity: parseInt(quantity) || 1,
                 isBought: false,
             };
-            onAddItem(newItem);
+            //onAddItem(newItem);
             onNotify(`${itemName} added!`, "success");
             setItemName("");
             setCategory("");
@@ -35,7 +35,7 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
             <button className="absolute top-2 right-2 text-lg text-red-500 hover:text-gray-700" onClick={onClose}>
                 &times;
             </button>
-            <Header title="Add New Item" subtitle="Fill out the details below to add a new item to your grocery list." />
+            <Header title="Edit Item" subtitle="Fill out the details below to edit the item." />
             <form className="mt-3 mb-5" onSubmit={handleSubmit}>
                 <div className="mb-2">
                     <label className="text-sm">Item Name</label>
@@ -65,7 +65,7 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
                 </div>
                 <div className="mb-0.5">
                     <label className="text-sm">Category</label>
-                    <select className="w-full rounded-lg border-2 border-gray-300 px-2 py-1" onChange={(e) => setCategory(e.target.value)}>
+                    <select className="w-full rounded-lg border-2 border-gray-300 px-2 py-1" value={category} onChange={(e) => setCategory(e.target.value)}>
                         <option value="">Select a category</option>
                         <option value="produce">Produce</option>
                         <option value="dairy">Dairy</option>
@@ -75,11 +75,11 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
                 </div>
 
                 <button className="w-full bg-gray-800 text-white py-2 rounded-lg mt-2">
-                    Add Item
+                    Submit
                 </button>
             </form>
         </dialog>
     )
 }
 
-export default AddItemDialog;
+export default EditItemDialog;

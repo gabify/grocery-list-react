@@ -1,4 +1,21 @@
+import { useState, useRef } from "react";
+import EditItemDialog from "./EditItemDialog";
+
 const GroceryItem = ({ item, onDelete, onToggle }) => {
+    const [isEditItemDialogOpen, setIsEditItemDialogOpen] = useState(false);
+    const dialogRef = useRef(null);
+    const openDialog = () => {
+        dialogRef.current.showModal();
+        setIsEditItemDialogOpen(true);
+    }
+
+    const closeDialog = () => {
+        dialogRef.current.close();
+        setIsEditItemDialogOpen(false);
+    }
+
+
+
     return (
         <li className={`
             flex items-center justify-between bg-gray-50 shadow-xs px-3 py-3 rounded-lg
@@ -14,12 +31,22 @@ const GroceryItem = ({ item, onDelete, onToggle }) => {
                 </div>
             </div>
 
-            <button className="text-red-400 text-sm" onClick={(e) => {
-                e.stopPropagation();
-                onDelete(item.id)
-            }}>
-                Delete
-            </button>
+            <div className="flex items-center gap-2">
+                <button className="text-amber-400 text-sm" onClick={(e) => {
+                    e.stopPropagation();
+                    openDialog();
+                }}>
+                    Edit
+                </button>
+                <button className="text-red-400 text-sm" onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(item.id)
+                }}>
+                    Delete
+                </button>
+            </div>
+
+            <EditItemDialog item={item} isOpen={isEditItemDialogOpen} dialogRef={dialogRef} onClose={closeDialog} />
         </li>
     )
 }
