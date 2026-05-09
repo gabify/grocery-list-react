@@ -5,10 +5,10 @@ import GroceryList from "./components/GroceryList";
 import Header from "./components/Header";
 import ListFilter from "./components/ListFilter";
 import ListSorter from "./components/ListSorter";
+import { useItemContext } from "./hooks/useItemContext";
 
 function App() {
-  const [items, setItems] = useState([]);
-  const [isDataLoaded, setIsDataLoaded] = useState(false); //Checks if data is loaded from localStoage
+  const {items, dispatch} = useItemContext();
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
   const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false);
@@ -32,39 +32,19 @@ function App() {
     setIsAddItemDialogOpen(false);
   }
 
-  const addItem = (item) => setItems([...items, item]);
-
-  const deleteItem = (id) => {
+/*   const deleteItem = (id) => {
     setItems(items.filter(item => item.id !== id));
     showToast("Item removed!", "success");
-  };
+  }; */
 
-  const toggleBought = (id) =>{
+/*   const toggleBought = (id) =>{
     setItems(items.map(item => 
       item.id === id ? {...item, isBought: !item.isBought} : item
     ));
-  }
+  } */
 
   const changeFilter = (newFilter) => setFilter(newFilter);
   const changeSortBy = (newSortBy) => setSortBy(newSortBy);
-
-  useEffect(() => {
-    const groceryList = localStorage.getItem("groceryList");
-    if (groceryList) {
-      setItems(JSON.parse(groceryList));
-    }
-    setIsDataLoaded(true);
-  }, []);
-
-
-  useEffect(() =>{
-    const updateGroceryList = () => {
-      if(!isDataLoaded) return;
-      localStorage.setItem("groceryList", JSON.stringify(items));
-    };
-
-    updateGroceryList();
-  }, [items, isDataLoaded]);
 
   return (
     <>
@@ -75,7 +55,6 @@ function App() {
           isOpen={isAddItemDialogOpen} 
           dialogRef={dialogRef} 
           onClose={closeDialog} 
-          onAddItem={addItem} 
           onNotify={showToast}
         />
 
@@ -86,7 +65,7 @@ function App() {
             Add Item
           </button>
         </section>
-        <GroceryList items={items} sortBy={sortBy} filter={filter} onDeleteItem={deleteItem} onToggleBought={toggleBought} />
+        <GroceryList items={items} sortBy={sortBy} filter={filter} />
 
         <Toaster 
           position="bottom-center"

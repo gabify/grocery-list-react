@@ -1,6 +1,6 @@
 import GroceryItem from "./GroceryItem";
 
-const GroceryList = ({ items, sortBy, filter, onDeleteItem, onToggleBought}) => {
+const GroceryList = ({ items, sortBy, filter}) => {
     const filteredItems = 
         filter === "all"
             ? items
@@ -43,7 +43,7 @@ const GroceryList = ({ items, sortBy, filter, onDeleteItem, onToggleBought}) => 
                     <h2 className="text-sm font-semibold uppercase text-gray-400 mt-6 mb-2">{category}</h2>
                     <ul className="space-y-2">
                         {items.map((item) => (
-                            <GroceryItem key={item.id} item={item} onDelete={onDeleteItem} onToggle={() => onToggleBought(item.id)} />
+                            <GroceryItem key={item.id} item={item} />
                         ))}
                     </ul>
                 </section>

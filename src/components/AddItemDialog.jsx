@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Header from "./Header";
+import { useItemContext } from "../hooks/useItemContext";
 
-const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
+const AddItemDialog = ({ isOpen, dialogRef, onClose, onNotify }) => {
+    const {dispatch} = useItemContext();
     const [itemName, setItemName] = useState("");
     const [category, setCategory] = useState("");
     const [quantity, setQuantity] = useState(1);
@@ -16,7 +18,7 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onAddItem, onNotify }) => {
                 quantity: parseInt(quantity) || 1,
                 isBought: false,
             };
-            onAddItem(newItem);
+            dispatch({type: "ADD_ITEM", payload: newItem});
             onNotify(`${itemName} added!`, "success");
             setItemName("");
             setCategory("");

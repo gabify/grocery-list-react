@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
 import EditItemDialog from "./EditItemDialog";
+import { useItemContext } from "../hooks/useItemContext";
 
-const GroceryItem = ({ item, onDelete, onToggle }) => {
+const GroceryItem = ({ item }) => {
+    const {dispatch} = useItemContext();
     const [isEditItemDialogOpen, setIsEditItemDialogOpen] = useState(false);
     const dialogRef = useRef(null);
     const openDialog = () => {
@@ -22,7 +24,7 @@ const GroceryItem = ({ item, onDelete, onToggle }) => {
             transition-transform duration-200 ease-out active:scale-105
             ${item.isBought ? 'opacity-75 bg-gray-100' : 'opacity-100'}
             `}
-            onClick={onToggle}
+            onClick={() => dispatch({type: "TOGGLE_ITEM", payload: item.id})}
         >
             <div className="flex items-center gap-2">
                 <input type="checkbox" checked={item.isBought} readOnly />
@@ -40,7 +42,7 @@ const GroceryItem = ({ item, onDelete, onToggle }) => {
                 </button>
                 <button className="text-red-400 text-sm" onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(item.id)
+                    dispatch({type: "DELETE_ITEM", payload: item.id});
                 }}>
                     Delete
                 </button>
