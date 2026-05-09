@@ -35,4 +35,4 @@
 3. Improve bought interaction ✅
 4. Add toast feedback ✅
 6. Inline editing of items ✅
-7. Floating Add Button
+7. Change the quantity section to interactive plus and minus buttons

@@ -33,7 +33,7 @@ const GroceryItem = ({ item }) => {
             </div>
 
             <div className="flex items-center gap-2">
-                <button className="text-amber-400 text-sm" onClick={(e) => {
+                <button className="text-amber-400 text-sm" disabled={item.isBought} onClick={(e) => {
                     e.stopPropagation();
                     openDialog();
                 }}>
