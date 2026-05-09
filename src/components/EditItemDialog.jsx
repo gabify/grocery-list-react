@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "./Header";
 import { useItemContext } from "../hooks/useItemContext";
+import toast from "react-hot-toast";
 
 const EditItemDialog = ({ item, isOpen, dialogRef, onClose }) => {
     const {dispatch} = useItemContext();
@@ -19,7 +20,10 @@ const EditItemDialog = ({ item, isOpen, dialogRef, onClose }) => {
                 isBought: item.isBought,
             };
             dispatch({type: "EDIT_ITEM", payload: newItem});
+            toast.success(`${itemName} updated!`);
             onClose();
+        }else{
+            toast.error("Please enter a valid item name.");
         }
     }
     

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Header from "./Header";
+import toast from "react-hot-toast";
 import { useItemContext } from "../hooks/useItemContext";
 
-const AddItemDialog = ({ isOpen, dialogRef, onClose, onNotify }) => {
+
+const AddItemDialog = ({ isOpen, dialogRef, onClose }) => {
     const {dispatch} = useItemContext();
     const [itemName, setItemName] = useState("");
     const [category, setCategory] = useState("");
@@ -19,11 +21,13 @@ const AddItemDialog = ({ isOpen, dialogRef, onClose, onNotify }) => {
                 isBought: false,
             };
             dispatch({type: "ADD_ITEM", payload: newItem});
-            onNotify(`${itemName} added!`, "success");
+            toast.success(`${itemName} added!`);
             setItemName("");
             setCategory("");
             setQuantity(1);
             onClose();
+        }else{
+            toast.error("Please enter a valid item name.");
         }
     }
     

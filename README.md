@@ -34,5 +34,5 @@
 2. Add micro animations ✅
 3. Improve bought interaction ✅
 4. Add toast feedback ✅
-6. Inline editing of items
+6. Inline editing of items ✅
 7. Floating Add Button

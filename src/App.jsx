@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import AddItemDialog from "./components/AddItemDialog";
 import GroceryList from "./components/GroceryList";
 import Header from "./components/Header";
@@ -12,14 +12,6 @@ function App() {
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
   const [isAddItemDialogOpen, setIsAddItemDialogOpen] = useState(false);
-
-  const showToast = (message, status) => {
-    if(status === "success"){
-      toast.success(message);
-    }else{
-      toast.error(message);
-    }
-  } 
 
   const dialogRef = useRef(null);
   const openDialog = () => {
@@ -44,7 +36,6 @@ function App() {
           isOpen={isAddItemDialogOpen} 
           dialogRef={dialogRef} 
           onClose={closeDialog} 
-          onNotify={showToast}
         />
 
         <section className="flex flex-row gap-2 my-5 ">

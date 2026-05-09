@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import EditItemDialog from "./EditItemDialog";
 import { useItemContext } from "../hooks/useItemContext";
+import toast from "react-hot-toast";
 
 const GroceryItem = ({ item }) => {
     const {dispatch} = useItemContext();
@@ -41,6 +42,7 @@ const GroceryItem = ({ item }) => {
                 <button className="text-red-400 text-sm" onClick={(e) => {
                     e.stopPropagation();
                     dispatch({type: "DELETE_ITEM", payload: item.id});
+                    toast.success(`${item.name} deleted!`);
                 }}>
                     Delete
                 </button>
